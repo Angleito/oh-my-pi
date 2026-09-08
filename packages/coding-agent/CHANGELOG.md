@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added Pyrefly as a built-in Python LSP server with automatic project and virtualenv detection.
+
 ## [18.1.14] - 2026-09-07
 
 ### Fixed
