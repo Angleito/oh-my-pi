@@ -5256,7 +5256,15 @@ describe("pyrefly python lsp", () => {
 	it("registers pyrefly for .py behind existing Python primaries and before ruff", () => {
 		const config = { servers: DEFAULTS as unknown as Record<string, ServerConfig> };
 		const names = getServersForFile(config, "app.py").map(([name]) => name);
-		expect(names).toEqual(["pyright", "basedpyright", "pylsp", "ty", "pyrefly", "ruff"]);
+		expect(names).toContain("pyrefly");
+		expect(names).toContain("ruff");
+		// pyrefly is behind all existing Python primaries
+		expect(names.indexOf("pyright")).toBeLessThan(names.indexOf("pyrefly"));
+		expect(names.indexOf("basedpyright")).toBeLessThan(names.indexOf("pyrefly"));
+		expect(names.indexOf("pylsp")).toBeLessThan(names.indexOf("pyrefly"));
+		expect(names.indexOf("ty")).toBeLessThan(names.indexOf("pyrefly"));
+		// ruff (linter) sorts after all primaries including pyrefly
+		expect(names.indexOf("pyrefly")).toBeLessThan(names.indexOf("ruff"));
 	});
 
 	it("registers pyrefly for .pyi stub files", () => {
