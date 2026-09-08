@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added Pyrefly as a built-in Python LSP server with automatic project and virtualenv detection.
+- Added Pyrefly as a built-in Python LSP server with automatic project and virtualenv detection ([#11203](https://github.com/can1357/oh-my-pi/pull/11203) by [@Angleito](https://github.com/Angleito)).
 
 ## [18.1.14] - 2026-09-07
 
