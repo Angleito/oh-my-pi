@@ -29,9 +29,10 @@ export async function getCurrentAutoresearchBranch(_api: ExtensionAPI, workDir: 
  * Ensure the working tree is on an `autoresearch/*` branch when possible.
  *
  * If the worktree is dirty and we're not already on an autoresearch branch, this returns
- * `{ ok: true, branchName: null, warning }` rather than failing. The caller surfaces the
- * warning and continues on the current branch — `keep` will skip auto-commits and `discard`
- * will revert only run-modified paths instead of resetting to baseline.
+ * `{ ok: true, branchName: <current branch>, created: false, warning }` rather than failing.
+ * The caller surfaces the warning and continues on the current branch — `keep` will skip
+ * auto-commits and `discard` will revert only run-modified paths instead of resetting to
+ * baseline. `branchName` is null only when detached or the branch name is empty.
  */
 export async function ensureAutoresearchBranch(
 	api: ExtensionAPI,
@@ -80,8 +81,10 @@ export async function ensureAutoresearchBranch(
 	if (dirtyPaths.length > 0) {
 		const preview = formatDirtyPaths(dirtyPaths);
 		return {
-			ok: false,
-			error: `Worktree is dirty (${preview}). Commit or stash these changes before starting autoresearch — a fresh autoresearch/* branch needs a clean baseline.`,
+			ok: true,
+			branchName: branch.length > 0 ? branch : null,
+			created: false,
+			warning: `Worktree is dirty (${preview}) — continuing on the current branch without a clean baseline. No autoresearch branch was created.`,
 		};
 	}
 
