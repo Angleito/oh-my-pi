@@ -187,7 +187,7 @@ export const createAutoresearchExtension: ExtensionFactory = api => {
 			const existingStorage = await openAutoresearchStorageIfExists(ctx.cwd);
 			const existingSession = existingStorage?.getActiveSessionForBranch(branchResult.branchName) ?? null;
 			const resumeContext = trimmed;
-			const branchStatusLine = branchResult.branchName
+			const branchStatusLine = branchResult.branchName?.startsWith("autoresearch/")
 				? branchResult.created
 					? `Created and checked out dedicated git branch \`${branchResult.branchName}\` before resuming.`
 					: `Using dedicated git branch \`${branchResult.branchName}\`.`

@@ -129,3 +129,19 @@ describe("ensureAutoresearchBranch jj guardrails", () => {
 		expect(result.branchName).toMatch(/^autoresearch\/demo-\d{8}$/);
 	});
 });
+
+describe("ensureAutoresearchBranch dirty worktree", () => {
+	it("continues on the current branch instead of failing", async () => {
+		const dir = await mkTempDir("omp-ar-dirty-");
+		await initGitWithCommit(dir);
+		await fs.writeFile(path.join(dir, "uncommitted.txt"), "dirty\n");
+
+		const result = await ensureAutoresearchBranch(stubApi, dir, "demo");
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) throw new Error("unreachable");
+		expect(result.created).toBe(false);
+		expect(result.branchName).toBe("main");
+		expect(result.warning).toMatch(/continuing on the current branch/);
+	});
+});
